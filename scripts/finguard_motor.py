@@ -41,7 +41,7 @@ def analisar_com_nova(texto_usuario: str) -> dict:
             ],
         }
     )
-    print(f"Corpo da Requisição: {corpo_requisicao}")#Debug
+    # print(f"Corpo da Requisição: {corpo_requisicao}")#Debug
 
     try:
         # Chamada ao modelo Nova Lite (Verifique o ID exato do modelo no console AWS)
@@ -52,7 +52,7 @@ def analisar_com_nova(texto_usuario: str) -> dict:
             accept="application/json"
         )
 
-        print(f"Resposta do Modelo: {response}")#Debug
+        # print(f"Resposta do Modelo: {response}")#Debug
 
         # 1. Leia o StreamingBody e decodifique para string
         response_body = response['body'].read().decode('utf-8')
@@ -63,7 +63,7 @@ def analisar_com_nova(texto_usuario: str) -> dict:
         # 3. Acesse o conteúdo (o formato da resposta do Nova Lite)
         texto_gerado = response_json['output']['message']['content'][0]['text']
 
-        print(f"Texto Gerado: {texto_gerado}")
+        # print(f"Texto Gerado: {texto_gerado}")#Debug
 
         return json.loads(texto_gerado)
 

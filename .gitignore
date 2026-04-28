@@ -101,3 +101,8 @@ poetry.lock
 *.joblib
 *.npy
 *.npz
+
+#report
+report/
+.png
+.csv

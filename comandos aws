@@ -1,0 +1,14 @@
+comandos aws
+
+
+>> aws configure
+O terminal solicitará quatro informações:
+AWS Access Key ID: Cole a sua chave.
+AWS Secret Access Key: Cole o seu segredo.
+Default region name: Digite us-east-1 (ou a região onde o modelo Nova Lite está habilitado para você).
+Default output format: Pode digitar json ou apenas apertar Enter.
+
+>> aws sts get-caller-identity
+Se ele retornar um JSON com o seu UserId e o nome do usuário que criamos (usuario-finguard), parabéns! 
+Seu computador está oficialmente autorizado a usar a inteligência artificial da AWS.
+
