@@ -18,14 +18,25 @@ def main_finguard():
     mostrar_apresentacao()
 
     historico_finguard: list = []  # Simulação de um dataset em memória
+
+    path_csv = "./dataset/dataset_finguard_desafio_3.csv"
+    try:
+        df = pd.read_csv(path_csv, encoding='utf-8-sig')
+       
+    except Exception as e:
+        print(f"Erro ao ler o arquivo CSV: {e}")
+        return
     
-    while True:
-        mensagem = input("\nDigite a reclamação (ou 'sair' para encerrar): ")
-        
-        if mensagem.lower() == 'sair':
-            generate_report(historico_finguard)
-            break
-        
+ # Iterar sobre cada linha do DataFrame
+    for index, row in df.iterrows():
+        mensagem = row.get('texto_reclamacao', None)
+        if not mensagem or pd.isna(mensagem):
+            print(f"\nLinha {index}: texto_reclamacao vazio ou inválido, pulando...")
+            continue
+
+        print(f"\nProcessando reclamação {index + 1}:")
+        print(f"Texto: {mensagem}")
+
         print("\n🔍 Analisando com AWS Nova Lite...")
         resultado = analisar_com_nova(mensagem)
 
@@ -37,15 +48,14 @@ def main_finguard():
             # Exibe o resultado formatado
             print("\n--- Resultado da Classificação ---")
             print(json.dumps(resultado, indent=4, ensure_ascii=False))
-            
+
             # Orquestração (Nível 2)
             orquestrador_finguard(resultado)
-            
+
             historico_finguard.append(resultado)
 
-            # Debug: Exibe o histórico atualizado
-            # for key, historico in enumerate(historico_finguard):
-            #     print(f"{key}: {historico}")
+    # Após processar todas as reclamações, gera o relatório
+    generate_report(historico_finguard)
 
 # Inicialização do programa
 if __name__ == "__main__":

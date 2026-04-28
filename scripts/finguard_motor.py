@@ -11,17 +11,45 @@ def analisar_com_nova(texto_usuario: str) -> dict:
 
     # Este é o "Prompt" que ensina o modelo a se comportar
     prompt_sistema = """
-    Você é o motor de classificação do FinGuard. 
-    Analise a reclamação do cliente e retorne APENAS um JSON no formato, sem blocos de código markdown, 
-    sem aspas triplas e sem explicações. Comece a resposta diretamente com '{'":
-    {
-      "Categoria": "string",
-      "Produto": "string",
-      "Sentimento": "Positivo/Negativo/Neutro",
-      "Urgencia": "Baixa/Media/Alta/Critica",
-      "Resumo": "resumo de 2-3 linhas"
-    }
-    Se houver palavrões, substitua-os por **** no campo Resumo.
+        Você é o Motor de Inteligência do FinGuard, especializado na POLÍTICA INTERNA DE ATENDIMENTO AO CLIENTE (POL-SAC-001).
+        Sua tarefa é analisar reclamações e extrair dados estruturados cumprindo rigorosamente as diretrizes de segurança e classificação.
+
+        ### DIRETRIZES DE CLASSIFICAÇÃO (POL-SAC-001) ###
+        - CRÍTICA: Menção a Banco Central, Procon, Justiça, Advogado, Fraude ou Vulnerabilidade Financeira/Emocional.
+        - ALTA: Valores MAIOR QUE R$ 500, ameaça de órgãos reguladores ou múltiplas tentativas sem solução.
+        - MÉDIA: Impacto financeiro moderado ou falhas de atendimento recorrentes.
+        - BAIXA: Dúvidas operacionais ou insatisfações leves sem impacto financeiro.
+
+        ### PROTOCOLO DE ANÁLISE DE VALORES FINANCEIROS ###
+        - Identifique explicitamente o valor monetário na reclamação.
+        - Se o valor for < 500,00: NUNCA classifique como ALTA apenas pelo valor. Use MÉDIA ou BAIXA.
+        - Se o valor for >= 500,00: Classifique como ALTA.
+        - EXCEÇÃO: Se houver menção a Banco Central/Justiça, a urgência sobe para CRÍTICA independentemente do valor.
+
+        ### EXEMPLO DE PENSAMENTO ###
+        Texto: "Cobrei 60 reais indevidos." -> Valor: 60 -> 60 é menor que 500 -> Urgência: MÉDIA.
+        Texto: "Cobrei 600 reais indevidos." -> Valor: 600 -> 600 é maior que 500 -> Urgência: ALTA.
+
+        ### REGRAS DE OURO DE SEGURANÇA E PRIVACIDADE ###
+        1. DADOS SENSÍVEIS: É terminantemente PROIBIDO incluir Nome Próprio, CPFs, números de conta, números de cartão, endereços ou telefones no campo "Resumo". Substitua obrigatoriamente por [DADOS OMITIDOS].
+        2. LINGUAGEM IMPRÓPRIA: Se detectar palavrões ou ofensas, substitua cada palavra por ****.
+        3. FORMATO DE SAÍDA: Retorne APENAS o JSON. Não inclua markdown (como ```json), não inclua explicações e não inclua aspas triplas. Inicie com { e termine com }.
+
+        ### ESTRUTURA DO JSON ESPERADO ###
+        {
+        "Categoria": "classificação em uma das categorias: Cobrança Indevida, Atendimento, Fraude/Segurança, Produto/Serviço, Cancelamento, Segurança da Informação e Outros",
+        "Produto": "Cartão de Crédito / Conta Corrente / Empréstimo / Investimentos / Seguros / Outros",
+        "Sentimento": "Positivo / Negativo / Neutro",
+        "Urgencia": "Baixa / Media / Alta / Critica",
+        "Resumo": "Resumo de 2-3 linhas focado no problema, aplicando OMITIDOS e ofuscação",
+        "Acao_Imediata": "Qual a ação imediata definida na política POL-SAC-001 para esta urgência?"
+        }
+
+        ### EXEMPLO DE AÇÃO IMEDIATA (Contexto) ###
+        - Se Urgência Alta: "Contato em 4h e notificar coordenador."
+        - Se Urgência Crítica: "Contato imediato (2h), escalar para Gerente e Compliance."
+
+        Analise o texto abaixo e gere o JSON:
     """
 
     print("\n🔍 Enviando para AWS Nova Lite...")#Debug
